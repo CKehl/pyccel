@@ -1,0 +1,29 @@
+C :
+  #pragma omp parallel
+  structured-block
+F :
+  !$omp parallel
+  !$omp end parallel
+Python :
+  #$ omp parallel
+  #$ omp end parallel
+
+C :
+  #pragma omp parallel
+  structured-block
+F :
+  !$omp parallel
+  !$omp end parallel
+Python :
+  #$ omp parallel
+  #$ omp end parallel
+
+C :
+  #pragma omp for
+  structured-block
+F :
+  !$omp do
+  !$omp end do
+Python :
+  #$ omp for
+  #$ omp end for
