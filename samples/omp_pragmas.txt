@@ -1,33 +1,36 @@
+Python :
+  #$ omp parallel
+  #$ omp end parallel
 C :
   #pragma omp parallel
   structured-block
 F :
   !$omp parallel
   !$omp end parallel
+--------------------------
 Python :
   #$ omp parallel
   #$ omp end parallel
---------------------------
 C :
   #pragma omp parallel
   structured-block
 F :
   !$omp parallel
   !$omp end parallel
-Python :
-  #$ omp parallel
-  #$ omp end parallel
 --------------------------
+Python :
+  #$ omp for
+  #$ omp end for
 C :
   #pragma omp for
   structured-block
 F :
   !$omp do
   !$omp end do
-Python :
-  #$ omp for
-  #$ omp end for
 --------------------------
+Python :
+  #$ omp metadirective
+  #$ omp end metadirective
 C :
   #pragma omp metadirective
   - or -
@@ -38,7 +41,4 @@ F :
   - or -
   !$omp begin metadirective
   !$omp end metadirective
-Python :
-  #$ omp metadirective
-  #$ omp end metadirective
 --------------------------
