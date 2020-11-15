@@ -7,7 +7,7 @@ F :
 Python :
   #$ omp parallel
   #$ omp end parallel
-
+--------------------------
 C :
   #pragma omp parallel
   structured-block
@@ -17,7 +17,7 @@ F :
 Python :
   #$ omp parallel
   #$ omp end parallel
-
+--------------------------
 C :
   #pragma omp for
   structured-block
@@ -27,3 +27,4 @@ F :
 Python :
   #$ omp for
   #$ omp end for
+--------------------------
