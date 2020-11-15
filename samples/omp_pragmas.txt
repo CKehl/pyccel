@@ -28,3 +28,17 @@ Python :
   #$ omp for
   #$ omp end for
 --------------------------
+C :
+  #pragma omp metadirective
+  - or -
+  #pragma omp begin metadirective
+  #pragma omp end metadirective
+F :
+  !$omp metadirective
+  - or -
+  !$omp begin metadirective
+  !$omp end metadirective
+Python :
+  #$ omp metadirective
+  #$ omp end metadirective
+--------------------------
