@@ -30,6 +30,8 @@ F :
 --------------------------
 Python :
   #$ omp metadirective
+  - or -
+  #$ omp begin metadirective
   #$ omp end metadirective
 C :
   #pragma omp metadirective
