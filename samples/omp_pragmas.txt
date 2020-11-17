@@ -404,18 +404,25 @@ C :
 F :
   !$omp cancel
 --------------------------
+Python :
+  #$ omp cancellation point
+C :
+  #pragma omp cancellation point
+F :
+  !$omp cancellation point
+--------------------------
 Parallel Worksharing-Loop SIMD
 --------------------------
 Python :
   #$ omp parallel for simd
-  #$ omp end parallel for simd ? Optional
+  #$ omp end parallel for simd
 C :
   #pragma omp parallel for simd
     for-loops
 F :
   !$omp parallel do simd
     do-loops
-  [ !$omp end parallel do simd ]
+  !$omp end parallel do simd
 --------------------------
 Python :
   #$ omp parallel master
@@ -429,103 +436,47 @@ F :
   !$omp end parallel master
 --------------------------
 Python :
-  #$ omp master taskloop
-  #$ omp end master taskloop ? Optional
+  #$ omp master taskloop [simd]
+  #$ omp end master taskloop [simd]
 C :
-  #pragma omp master taskloop
+  #pragma omp master taskloop [simd]
     for-loops
 F :
-  !$omp master taskloop
+  !$omp master taskloop [simd]
     for-loops
-  [ !$omp end master taskloop ]
-
+  !$omp end master taskloop [simd]
 --------------------------
 Python :
-  #$ omp master taskloop simd
-  #$ omp end master taskloop simd ? Optional
+  #$ omp parallel master taskloop [simd]
+  #$ omp end parallel master taskloop [simd]
 C :
-  #pragma omp master taskloop simd
+  #pragma omp parallel master taskloop [simd]
     for-loops
 F :
-  !$omp master taskloop simd
+  !$omp parallel master taskloop [simd]
     for-loops
-  [ !$omp end master taskloop simd ]
---------------------------
-Python :
-  #$ omp parallel master taskloop
-  #$ omp end parallel master taskloop ? Optional
-C :
-  #pragma omp parallel master taskloop
-    for-loops
-F :
-  !$omp parallel master taskloop
-    for-loops
-  [ !$omp end parallel master taskloop ]
---------------------------
-Python :
-  #$ omp parallel master taskloop simd
-  #$ omp end parallel master taskloop simd ? Optional
-C :
-  #pragma omp parallel master taskloop simd
-    for-loops
-F :
-  !$omp parallel master taskloop simd
-    for-loops
-  [ !$omp end parallel master taskloop simd ]
+  !$omp end parallel master taskloop [simd]
 --------------------------
 --------------------------
 Python :
-  #$ omp teams distribute
-  #$ omp end teams distribute ? Optional
+  #$ omp teams distribute [simd]
+  #$ omp end teams distribute [simd]
 C :
-  #pragma omp teams distribute
+  #pragma omp teams distribute [simd]
     for-loops
 F :
-  !$omp teams distribute
+  !$omp teams distribute [simd]
     do-loops
-  [ !$omp end teams distribute ]
+  !$omp end teams distribute [simd]
 --------------------------
 Python :
-  #$ omp target parallel for
-  #$ omp end target parallel for ? Optional
+  #$ omp target parallel for [simd]
+  #$ omp end target parallel for [simd]
 C :
-  #pragma omp target parallel for
+  #pragma omp target parallel for [simd]
     for-loops
 F :
-  !$omp target parallel do
+  !$omp target parallel do [simd]
     do-loops
-  [ !$omp end target parallel do ]
---------------------------
-Python :
-  #$ omp teams distribute simd
-  #$ omp end teams distribute simd ? Optional
-C :
-  #pragma omp teams distribute simd
-    for-loops
-F :
-  !$omp teams distribute simd
-    for-loops
-  [ !$omp end teams distribute simd ]
---------------------------
-Python :
-  #$ omp target parallel for simd
-  #$ omp end target parallel for simd ? Optional
-C :
-  #pragma omp target parallel for simd
-    for-loops
-F :
-  !$omp target parallel do simd
-    for-loops
-  [ !$omp end target parallel do simd ]
---------------------------
-Python :
-  #$ omp target parallel for simd
-  #$ omp end target parallel for simd ? Optional
-C :
-  #pragma omp target parallel for simd
-    for-loops
-F :
-  !$omp target parallel do simd
-    for-loops
-  [ !$omp end target parallel do simd ]
+  !$omp end target parallel do [simd]
 --------------------------
