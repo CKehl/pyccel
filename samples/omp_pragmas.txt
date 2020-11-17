@@ -295,6 +295,58 @@ C :
 F :
   !$omp target enter data
 --------------------------
+Python :
+  #$ omp target exit data
+C :
+  #pragma omp target exit data
+F :
+  !$omp target exit data
+--------------------------
+Python :
+  #$ omp target
+  #$ omp end target
+C :
+  #pragma omp target
+    structured-block
+F :
+  !$omp target
+    loosely-structured-block
+  !$omp end target
+--------------------------
+Python :
+  #$ omp target update
+C :
+  #pragma omp target update
+F :
+  !$omp target update
+--------------------------
+Synchronization constructs
+--------------------------
+Python :
+  #$ omp critical
+  #$ omp end critical
+C :
+  #pragma omp critical
+    structured-block
+F :
+  !$omp critical
+    loosely-structured-block
+  !$omp end critical
+--------------------------
+Python :
+  #$ omp barrier
+C :
+  #pragma omp barrier
+F :
+  !$omp barrier
+--------------------------
+Python :
+  #$ omp taskwait
+C :
+  #pragma omp taskwait
+F :
+  !$omp taskwait
+--------------------------
 
 
 --------------------------
