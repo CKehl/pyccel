@@ -397,9 +397,12 @@ F :
 --------------------------
 Cancellation constructs
 --------------------------
-
-
-
+Python :
+  #$ omp cancel
+C :
+  #pragma omp cancel
+F :
+  !$omp cancel
 --------------------------
 Parallel Worksharing-Loop SIMD
 --------------------------
