@@ -388,7 +388,15 @@ F :
     loosely-structured-block
   !$omp end ordered
 --------------------------
-
+Python :
+  #$ omp depobj
+C :
+  #pragma omp depobj
+F :
+  !$omp depobj
+--------------------------
+Cancellation constructs
+--------------------------
 
 
 
