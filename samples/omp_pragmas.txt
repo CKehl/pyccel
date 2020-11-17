@@ -1,32 +1,4 @@
-Python :
-  #$ omp parallel
-  #$ omp end parallel
-C :
-  #pragma omp parallel
-  structured-block
-F :
-  !$omp parallel
-  !$omp end parallel
---------------------------
-Python :
-  #$ omp parallel
-  #$ omp end parallel
-C :
-  #pragma omp parallel
-  structured-block
-F :
-  !$omp parallel
-  !$omp end parallel
---------------------------
-Python :
-  #$ omp for
-  #$ omp end for
-C :
-  #pragma omp for
-  structured-block
-F :
-  !$omp do
-  !$omp end do
+Variant directives
 --------------------------
 Python :
   #$ omp metadirective
@@ -43,6 +15,288 @@ F :
   - or -
   !$omp begin metadirective
   !$omp end metadirective
+--------------------------
+Python :
+  #$ omp declare variant
+  - or -
+  #$ omp declare variant
+  #$ omp end declare variant
+C :
+  #pragma omp declare variant
+    function definition or declaration
+  - or -
+  #pragma omp declare variant clause
+    declaration-definition-seq
+  #pragma omp end declare variant
+F :
+  !$omp declare variant
+--------------------------
+Python :
+  #$ omp dispatch
+C :
+  #pragma omp dispatch
+    expression-stmt
+F :
+  !$omp dispatch
+    stmt
+--------------------------
+Informational and utility directives
+--------------------------
+Python :
+  #$ omp requires
+C :
+  #pragma omp requires
+F :
+  !$omp requires
+--------------------------
+Python :
+  #$ omp assume
+  - or -
+  #$ omp assume
+  #$ omp end assume
+C :
+  #pragma omp assumes
+  - or -
+  #pragma omp begin assumes
+    declaration-definition-seq
+  #pragma omp end assumes
+  - or -
+  #pragma omp assume
+    structured-block
+F :
+  !$omp assumes
+  - or -
+  !$omp assume
+    loosely-structured-block
+  !$ omp end assume
+--------------------------
+Python :
+  #$ omp nothing
+C :
+  #pragma omp nothing
+F :
+  !$omp nothing
+--------------------------
+Python :
+  #$ omp error
+C :
+  #pragma omp error
+F :
+  !$omp error
+--------------------------
+Teams construct
+--------------------------
+Python :
+  #$ omp error
+C :
+  #pragma omp teams
+    structured-block
+F :
+  !$omp teams
+    loosely-structured-block
+  !$omp end teams
+--------------------------
+Masked construct
+--------------------------
+Python :
+  #$ omp masked
+  #$ omp end masked
+C :
+  #pragma omp masked
+    structured-block
+F :
+  !$omp masked
+    loosely-structured-block
+  !$omp end masked
+--------------------------
+Scope construct
+--------------------------
+Python :
+  #$ omp scope
+  #$ omp end scope
+C :
+  #pragma omp scope
+    structured-block
+F :
+  !$omp scope
+    loosely-structured-block
+  !$omp end scope
+--------------------------
+Worksharing constructs
+--------------------------
+Python :
+  #$ omp sections
+    #$ omp section
+      structured-block-sequence
+    #$ omp end section
+  #$ omp end sections
+C :
+  #pragma omp sections
+  {
+    #pragma omp section]
+      structured-block-sequence
+    #pragma omp section
+      structured-block-sequence
+  }
+F :
+  !$omp sections
+    !$omp section
+      structured-block-sequence
+    !$omp section
+      structured-block-sequence
+  !$omp end sections
+--------------------------
+Python :
+  #$ omp workshare
+  #$ omp end workshare
+F :
+  !$omp workshare
+    loosely structured-block
+  !$omp end workshare
+--------------------------
+Distribute loop constructs
+--------------------------
+Python :
+  #$ omp distribute
+  #$ omp end distribute
+C :
+  #pragma omp distribute
+    loop-nest
+F :
+  !$omp distribute
+    loop-nest
+  !$omp end distribute
+--------------------------
+Python :
+  #$ omp distribute simd
+  #$ omp end distribute simd
+C :
+  #pragma omp distribute simd
+    loop-nest
+F :
+  !$omp distribute simd
+    loop-nest
+  !$omp end distribute simd
+--------------------------
+Python :
+  #$ omp distribute parallel for [simd]
+  #$ omp end distribute parallel for [simd]
+C :
+  #pragma omp distribute parallel for [simd]
+    loop-nest
+F :
+  !$omp distribute parallel do [simd]
+    loop-nest
+  !$omp end distribute parallel do [simd]
+--------------------------
+loop construct
+--------------------------
+Python :
+  #$ omp loop
+  #$ omp end loop
+C :
+  #pragma omp loop
+    loop-nest
+F :
+  !$omp loop
+    loop-nest
+  !$omp end loop
+--------------------------
+Scan directive
+--------------------------
+Python :
+  #$ omp scan
+C :
+  #pragma omp scan
+F :
+  !$omp scan
+--------------------------
+Loop transformation constructs
+--------------------------
+Python :
+  #$ omp tile sizes
+  #$ omp end tile sizes
+C :
+  #pragma omp tile sizes
+    loop-nest
+F :
+  !$omp tile sizes
+    loop-nest
+  !$omp end tile sizes
+--------------------------
+Python :
+  #$ omp unroll
+  #$ omp end unroll
+C :
+  #pragma omp unroll
+    loop-nest
+F :
+  !$omp unroll
+    loop-nest
+  !$omp end unroll
+--------------------------
+Tasking constructs
+--------------------------
+Python :
+  #$ omp task
+  #$ omp end task
+C :
+  #pragma omp task
+    structured-block
+F :
+  !$omp task
+    loosely-structured-block
+  !$omp end task
+--------------------------
+Python :
+  #$ omp taskloop [simd]
+  #$ omp end taskloop [simd]
+C :
+  #pragma omp taskloop [simd]
+    loop-nest
+F :
+  !$omp taskloop [simd]
+    loop-nest
+  !$omp end taskloop [simd]
+--------------------------
+Python :
+  #$ omp taskyield
+C :
+  #pragma omp taskyield
+F :
+  !$omp taskyield
+--------------------------
+Memory management directives
+--------------------------
+Python :
+  #$ omp allocate
+C :
+  #pragma omp allocate
+F :
+  !$omp allocate
+--------------------------
+Device directives and construct
+--------------------------
+Python :
+  #$ omp target data
+  #$ omp end target data
+C :
+  #pragma omp target data
+    structured-block
+F :
+  !$omp target data
+    loosely-structured-block
+  !$omp end target data
+--------------------------
+Python :
+  #$ omp target enter data
+C :
+  #pragma omp target enter data
+F :
+  !$omp target enter data
+--------------------------
+
+
 --------------------------
 Parallel Worksharing-Loop SIMD
 --------------------------
