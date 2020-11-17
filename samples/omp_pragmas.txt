@@ -347,6 +347,49 @@ C :
 F :
   !$omp taskwait
 --------------------------
+Python :
+  #$ omp taskgroup
+  #$ omp end taskgroup
+C :
+  #pragma omp taskgroup
+    structured-block
+F :
+  !$omp taskgroup
+    loosely-structured-block
+  !$omp end taskgroup
+--------------------------
+Python :
+  #$ omp atomic
+  #$ omp end atomic
+C :
+  #pragma omp atomic
+    statement
+F :
+  !$omp atomic
+    statement
+    capture-statement
+  !$omp end atomic
+--------------------------
+Python :
+  #$ omp flush
+C :
+  #pragma omp flush
+F :
+  !$omp flush
+--------------------------
+Python :
+  #$ omp ordered
+  #$ omp end ordered
+C :
+  #pragma omp ordered
+    structured-block
+F :
+  !$omp ordered
+    loosely-structured-block
+  !$omp end ordered
+--------------------------
+
+
 
 
 --------------------------
