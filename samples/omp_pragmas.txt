@@ -411,6 +411,29 @@ C :
 F :
   !$omp cancellation point
 --------------------------
+Python :
+  #$ omp declare mapper
+C :
+  #pragma omp declare mapper
+F :
+  !$omp declare mapper
+--------------------------
+Data environment directives
+--------------------------
+Python :
+  #$ omp threadprivate
+C :
+  #pragma omp threadprivate
+F :
+  !$omp threadprivate
+--------------------------
+Python :
+  #$ omp declare reduction
+C :
+  #pragma omp declare reduction
+F :
+  !$omp declare reduction
+--------------------------
 Parallel Worksharing-Loop SIMD
 --------------------------
 Python :
