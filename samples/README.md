@@ -17,7 +17,7 @@ def set_num_threads(n):
     omp_set_num_threads(n)
 ```
 
-## Usage Directives on Pyccel
+## Directives Usage on Pyccel
 ### Parallel Constructs
 
 #### Syntax :
@@ -43,7 +43,6 @@ n = omp_get_num_threads()
 ```python
 #$ omp for [clause[ [,] clause] ... ]
   for-loops
-#$ omp end for
 ```
 #### Example :
 
@@ -53,7 +52,6 @@ result = 0
 #$ omp for reduction (+:result)
 for i in range(0, 1000):
   result += i
-#$ omp end for
 #$ omp end parallel
 ```
 
