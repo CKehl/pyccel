@@ -5,7 +5,11 @@
 #define getname(X) #X
 #define my_assert(X , Y, dscr) _Generic((X), double: assert_double,\
                             float: assert_float,\
-                            int: assert_int,\
+                            int64_t: assert_int64,\
+                            int32_t: assert_int32,\
+                            int16_t: assert_int16,\
+                            int8_t: assert_int8,\
+                            float complex : assert_cfloat,\
                             double complex : assert_cdouble,\
                             default: assert_ns)(X , Y, getname(X), getname(Y), dscr, __func__, __FILE__, __LINE__)
 
@@ -39,7 +43,22 @@ void assert_float(float v1 , float v2,
     printf("[DSCR] %s\n", dscr);
 }
 
-void assert_int(int v1 , int v2,
+void assert_int64(int64_t v1 , int64_t v2,
+        const char *v1_name, const char *v2_name,const char *dscr,
+        const char * func, const char *file, int line)
+{
+    if (v1 != v2)
+    {
+        printf("[FAIL] %s:%d:%s\n", file, line, func);
+        printf("[INFO] %s:%ld != %s:%ld\n", v1_name, v1, v2_name,v2);
+        printf("[DSCR] %s\n", dscr);
+        return ;
+    }
+    printf("[PASS] %s:%d:%s\n", file, line, func);
+    printf("[DSCR] %s\n", dscr);
+}
+
+void assert_int32(int32_t v1 , int32_t v2,
         const char *v1_name, const char *v2_name,const char *dscr,
         const char * func, const char *file, int line)
 {
@@ -47,6 +66,51 @@ void assert_int(int v1 , int v2,
     {
         printf("[FAIL] %s:%d:%s\n", file, line, func);
         printf("[INFO] %s:%d != %s:%d\n", v1_name, v1, v2_name,v2);
+        printf("[DSCR] %s\n", dscr);
+        return ;
+    }
+    printf("[PASS] %s:%d:%s\n", file, line, func);
+    printf("[DSCR] %s\n", dscr);
+}
+
+void assert_int16(int16_t v1 , int16_t v2,
+        const char *v1_name, const char *v2_name,const char *dscr,
+        const char * func, const char *file, int line)
+{
+    if (v1 != v2)
+    {
+        printf("[FAIL] %s:%d:%s\n", file, line, func);
+        printf("[INFO] %s:%d != %s:%d\n", v1_name, v1, v2_name,v2);
+        printf("[DSCR] %s\n", dscr);
+        return ;
+    }
+    printf("[PASS] %s:%d:%s\n", file, line, func);
+    printf("[DSCR] %s\n", dscr);
+}
+
+void assert_int8(int8_t v1 , int8_t v2,
+        const char *v1_name, const char *v2_name,const char *dscr,
+        const char * func, const char *file, int line)
+{
+    if (v1 != v2)
+    {
+        printf("[FAIL] %s:%d:%s\n", file, line, func);
+        printf("[INFO] %s:%d != %s:%d\n", v1_name, v1, v2_name,v2);
+        printf("[DSCR] %s\n", dscr);
+        return ;
+    }
+    printf("[PASS] %s:%d:%s\n", file, line, func);
+    printf("[DSCR] %s\n", dscr);
+}
+
+void assert_cfloat(float complex v1 , float complex v2,
+        const char *v1_name, const char *v2_name,const char *dscr,
+        const char * func, const char *file, int line)
+{
+    if (v1 != v2)
+    {
+        printf("[FAIL] %s:%d:%s\n", file, line, func);
+        printf("[INFO] %s:%f+%f*I != %s:%f+%f*I\n", v1_name, creal(v1), cimag(v1), v2_name,creal(v2), cimag(v2));
         printf("[DSCR] %s\n", dscr);
         return ;
     }
@@ -78,9 +142,9 @@ void assert_ns(float v1 , float v2,
     printf("[DSCR] %s\n", dscr);
 }
 
-int test_indexing_int(void)
+int test_indexing_int64(void)
 {
-    int m_1[] = {2, 3, 5, 5, 6, 7, 10, 11,
+    int64_t m_1[] = {2, 3, 5, 5, 6, 7, 10, 11,
                 12, 260, 6, 8, 8, 0, 45, 0,
                 1, 0, 0, 1, 200, 33, 5, 57,
                 62, 70, 103, 141, 122, 26, 36, 82,
@@ -89,8 +153,37 @@ int test_indexing_int(void)
     t_ndarray x;
     int index;
     int c_index;
-    int value;
-    int c_value;
+    int64_t value;
+    int64_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int64);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    // testing the index [3, 2]
+    index = 3 * x.strides[0] + 2 * x.strides[1];
+    c_index = 26;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 2) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 2]
+    value = x.nd_int64[index];
+    c_value = 103;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_indexing_int32(void)
+{
+    int32_t m_1[] = {2, 3, 5, 5, 6, 7, 10, 11,
+                12, 260, 6, 8, 8, 0, 45, 0,
+                1, 0, 0, 1, 200, 33, 5, 57,
+                62, 70, 103, 141, 122, 26, 36, 82,
+                8, 10, 4115, 22, 1, 11, 1, 19};
+    int m_1_shape[] = {5, 8};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int32_t value;
+    int32_t c_value;
 
     x = array_create(2, m_1_shape, nd_int32);
     memcpy(x.raw_data, m_1, x.buffer_size);
@@ -101,6 +194,64 @@ int test_indexing_int(void)
     my_assert(get_index(x, 3, 2) , c_index, "testing the indexing function");
     // testing the value with the index [3, 2]
     value = x.nd_int32[index];
+    c_value = 103;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_indexing_int16(void)
+{
+    int16_t m_1[] = {2, 3, 5, 5, 6, 7, 10, 11,
+                12, 260, 6, 8, 8, 0, 45, 0,
+                1, 0, 0, 1, 200, 33, 5, 57,
+                62, 70, 103, 141, 122, 26, 36, 82,
+                8, 10, 4115, 22, 1, 11, 1, 19};
+    int m_1_shape[] = {5, 8};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int16_t value;
+    int16_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int16);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    // testing the index [3, 2]
+    index = 3 * x.strides[0] + 2 * x.strides[1];
+    c_index = 26;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 2) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 2]
+    value = x.nd_int16[index];
+    c_value = 103;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_indexing_int8(void)
+{
+    int8_t m_1[] = {2, 3, 5, 5, 6, 7, 10, 11,
+                12, 250, 6, 8, 8, 0, 45, 0,
+                1, 0, 0, 1, 200, 33, 5, 57,
+                62, 70, 103, 141, 122, 26, 36, 82,
+                8, 10, 251, 22, 1, 11, 1, 19};
+    int m_1_shape[] = {5, 8};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int8_t value;
+    int8_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int8);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    // testing the index [3, 2]
+    index = 3 * x.strides[0] + 2 * x.strides[1];
+    c_index = 26;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 2) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 2]
+    value = x.nd_int8[index];
     c_value = 103;
     my_assert(value , c_value, "testing the value");
     free_array(x);
@@ -165,14 +316,42 @@ int test_indexing_cdouble(void)
     return (0);
 }
 
+int test_indexing_cfloat(void)
+{
+    float complex m_1[] = {0.37 + 0.588*I,  0.92689451+0.57106791*I,
+                            0.93598206+0.30289964*I,  0.54404246+0.09516331*I,
+                            0.02827254+0.00432899*I,  0.06873651+0.24810741*I,
+                            0.94040543+0.43508215*I,  0.58532094+0.67890618*I,
+                            0.68742283+0.64951155*I,  0.15372315+0.89699101*I};
+    int m_1_shape[] = {5, 2};
+    t_ndarray x;
+    int index;
+    int c_index;
+    float complex value;
+    float complex c_value;
+
+    x = array_create(2, m_1_shape, nd_cfloat);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    // testing the index [3, 1]
+    index = 3 * x.strides[0] + 1 * x.strides[1];
+    c_index = 7;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 1]
+    value = x.nd_cfloat[index];
+    c_value = 0.58532094+0.67890618*I;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
 
 /* 
 **  slicing tests
 */
 
-int test_slicing_int(void)
+int test_slicing_int64(void)
 {
-    int m_1[] = {2, 3, 5, 5, 6,
+    int64_t m_1[] = {2, 3, 5, 5, 6,
                 7, 10, 11, 12, 260,
                 6, 8, 8, 0, 45,
                 0, 1, 0, 0, 1,
@@ -184,8 +363,49 @@ int test_slicing_int(void)
     t_ndarray x;
     t_ndarray xview;
     int c_index;
-    int value;
-    int c_value;
+    int64_t value;
+    int64_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int64);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    xview = array_slicing(x, new_slice(1, 2, 1), new_slice(0, 5, 2));
+    c_index = 5;
+    for (int i = 0; i < xview.shape[0]; i++)
+    {
+        for (int j = 0; j < xview.shape[1]; j++)
+        {
+            value = xview.nd_int64[get_index(xview, i, j)];
+            c_value = m_1[c_index];
+            c_index+=2;
+            if (value != c_value)
+                my_assert(value , c_value, "testing xview values");
+        }
+    }
+    c_value = 1337;
+    xview.nd_int64[get_index(xview, 0, 1)] = c_value;
+    value = x.nd_int64[get_index(x, 1, 2)];
+    my_assert(value , c_value, "testing xview assignment");
+    free_array(x);
+    free_array(xview);
+    return (0);
+}
+
+int test_slicing_int32(void)
+{
+    int32_t m_1[] = {2, 3, 5, 5, 6,
+                7, 10, 11, 12, 260,
+                6, 8, 8, 0, 45,
+                0, 1, 0, 0, 1,
+                200, 33, 5, 57, 62,
+                70, 103, 141, 122, 26,
+                36, 82, 8, 10, 4115,
+                22, 1, 11, 1, 19};
+    int m_1_shape[] = {8, 5};
+    t_ndarray x;
+    t_ndarray xview;
+    int c_index;
+    int32_t value;
+    int32_t c_value;
 
     x = array_create(2, m_1_shape, nd_int32);
     memcpy(x.raw_data, m_1, x.buffer_size);
@@ -205,6 +425,87 @@ int test_slicing_int(void)
     c_value = 1337;
     xview.nd_int32[get_index(xview, 0, 1)] = c_value;
     value = x.nd_int32[get_index(x, 1, 2)];
+    my_assert(value , c_value, "testing xview assignment");
+    free_array(x);
+    free_array(xview);
+    return (0);
+}
+int test_slicing_int16(void)
+{
+    int16_t m_1[] = {2, 3, 5, 5, 6,
+                7, 10, 11, 12, 260,
+                6, 8, 8, 0, 45,
+                0, 1, 0, 0, 1,
+                200, 33, 5, 57, 62,
+                70, 103, 141, 122, 26,
+                36, 82, 8, 10, 4115,
+                22, 1, 11, 1, 19};
+    int m_1_shape[] = {8, 5};
+    t_ndarray x;
+    t_ndarray xview;
+    int c_index;
+    int16_t value;
+    int16_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int16);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    xview = array_slicing(x, new_slice(1, 2, 1), new_slice(0, 5, 2));
+    c_index = 5;
+    for (int i = 0; i < xview.shape[0]; i++)
+    {
+        for (int j = 0; j < xview.shape[1]; j++)
+        {
+            value = xview.nd_int16[get_index(xview, i, j)];
+            c_value = m_1[c_index];
+            c_index+=2;
+            if (value != c_value)
+                my_assert(value , c_value, "testing xview values");
+        }
+    }
+    c_value = 1337;
+    xview.nd_int16[get_index(xview, 0, 1)] = c_value;
+    value = x.nd_int16[get_index(x, 1, 2)];
+    my_assert(value , c_value, "testing xview assignment");
+    free_array(x);
+    free_array(xview);
+    return (0);
+}
+
+int test_slicing_int8(void)
+{
+    int8_t m_1[] = {2, 3, 5, 5, 6,
+                7, 10, 11, 12, 250,
+                6, 8, 8, 0, 45,
+                0, 1, 0, 0, 1,
+                200, 33, 5, 57, 62,
+                70, 103, 141, 122, 26,
+                36, 82, 8, 10, 251,
+                22, 1, 11, 1, 19};
+    int m_1_shape[] = {8, 5};
+    t_ndarray x;
+    t_ndarray xview;
+    int c_index;
+    int8_t value;
+    int8_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int8);
+    memcpy(x.raw_data, m_1, x.buffer_size);
+    xview = array_slicing(x, new_slice(1, 2, 1), new_slice(0, 5, 2));
+    c_index = 5;
+    for (int i = 0; i < xview.shape[0]; i++)
+    {
+        for (int j = 0; j < xview.shape[1]; j++)
+        {
+            value = xview.nd_int8[get_index(xview, i, j)];
+            c_value = m_1[c_index];
+            c_index+=2;
+            if (value != c_value)
+                my_assert(value , c_value, "testing xview values");
+        }
+    }
+    c_value = 133;
+    xview.nd_int8[get_index(xview, 0, 1)] = c_value;
+    value = x.nd_int8[get_index(x, 1, 2)];
     my_assert(value , c_value, "testing xview assignment");
     free_array(x);
     free_array(xview);
@@ -291,17 +592,41 @@ int test_slicing_cdouble(void)
 
 /* array_fill tests */
 
-int test_array_fill_int(void)
+int test_array_fill_int64(void)
 {
     int m_1_shape[] = {5, 2};
     t_ndarray x;
     int index;
     int c_index;
-    int value;
-    int c_value;
+    int64_t value;
+    int64_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int64);
+    array_fill((int64_t)32, x);
+    // testing the index [3, 1]
+    index = 3 * x.strides[0] + 1 * x.strides[1];
+    c_index = 7;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 1]
+    value = x.nd_int64[index];
+    c_value = 32;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_array_fill_int32(void)
+{
+    int m_1_shape[] = {5, 2};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int32_t value;
+    int32_t c_value;
 
     x = array_create(2, m_1_shape, nd_int32);
-    array_fill(32, x);
+    array_fill((int32_t)32, x);
     // testing the index [3, 1]
     index = 3 * x.strides[0] + 1 * x.strides[1];
     c_index = 7;
@@ -309,6 +634,54 @@ int test_array_fill_int(void)
     my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
     // testing the value with the index [3, 1]
     value = x.nd_int32[index];
+    c_value = 32;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_array_fill_int16(void)
+{
+    int m_1_shape[] = {5, 2};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int16_t value;
+    int16_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int16);
+    array_fill((int16_t)32, x);
+    // testing the index [3, 1]
+    index = 3 * x.strides[0] + 1 * x.strides[1];
+    c_index = 7;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 1]
+    value = x.nd_int16[index];
+    c_value = 32;
+    my_assert(value , c_value, "testing the value");
+    free_array(x);
+    return (0);
+}
+
+int test_array_fill_int8(void)
+{
+    int m_1_shape[] = {5, 2};
+    t_ndarray x;
+    int index;
+    int c_index;
+    int8_t value;
+    int8_t c_value;
+
+    x = array_create(2, m_1_shape, nd_int8);
+    array_fill((int8_t)32, x);
+    // testing the index [3, 1]
+    index = 3 * x.strides[0] + 1 * x.strides[1];
+    c_index = 7;
+    my_assert(index , c_index, "testing the strides");
+    my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
+    // testing the value with the index [3, 1]
+    value = x.nd_int8[index];
     c_value = 32;
     my_assert(value , c_value, "testing the value");
     free_array(x);
@@ -389,14 +762,14 @@ int test_array_zeros_double(void)
     return (0);
 }
 
-int test_array_zeros_int(void)
+int test_array_zeros_int32(void)
 {
     int m_1_shape[] = {5, 2};
     t_ndarray x;
     int index;
     int c_index;
-    int value;
-    int c_value;
+    int32_t value;
+    int32_t c_value;
 
     x = array_create(2, m_1_shape, nd_int32);
     array_fill(0, x);
@@ -441,18 +814,27 @@ int main(void)
 {
     /* indexing tests */
     test_indexing_double();
-    test_indexing_int();
+    test_indexing_int64();
+    test_indexing_int32();
+    test_indexing_int16();
+    test_indexing_int8();
     test_indexing_cdouble();
     /* slicing tests */
     test_slicing_double();
-    test_slicing_int();
+    test_slicing_int64();
+    test_slicing_int32();
+    test_slicing_int16();
+    test_slicing_int8();
     test_slicing_cdouble();
     /* array_fill tests */
-    test_array_fill_int();
+    test_array_fill_int64();
+    test_array_fill_int32();
+    test_array_fill_int16();
+    test_array_fill_int8();
     test_array_fill_double();
     test_array_fill_cdouble();
     /* array_zeros tests */
-    test_array_zeros_int();
+    test_array_zeros_int32();
     test_array_zeros_double();
     test_array_zeros_cdouble();
     return (0);
