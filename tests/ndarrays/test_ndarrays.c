@@ -92,7 +92,7 @@ int test_indexing_int(void)
     int value;
     int c_value;
 
-    x = array_create(2, m_1_shape, nd_int);
+    x = array_create(2, m_1_shape, nd_int32);
     memcpy(x.raw_data, m_1, x.buffer_size);
     // testing the index [3, 2]
     index = 3 * x.strides[0] + 2 * x.strides[1];
@@ -100,7 +100,7 @@ int test_indexing_int(void)
     my_assert(index , c_index, "testing the strides");
     my_assert(get_index(x, 3, 2) , c_index, "testing the indexing function");
     // testing the value with the index [3, 2]
-    value = x.nd_int[index];
+    value = x.nd_int32[index];
     c_value = 103;
     my_assert(value , c_value, "testing the value");
     free_array(x);
@@ -187,7 +187,7 @@ int test_slicing_int(void)
     int value;
     int c_value;
 
-    x = array_create(2, m_1_shape, nd_int);
+    x = array_create(2, m_1_shape, nd_int32);
     memcpy(x.raw_data, m_1, x.buffer_size);
     xview = array_slicing(x, new_slice(1, 2, 1), new_slice(0, 5, 2));
     c_index = 5;
@@ -195,7 +195,7 @@ int test_slicing_int(void)
     {
         for (int j = 0; j < xview.shape[1]; j++)
         {
-            value = xview.nd_int[get_index(xview, i, j)];
+            value = xview.nd_int32[get_index(xview, i, j)];
             c_value = m_1[c_index];
             c_index+=2;
             if (value != c_value)
@@ -203,8 +203,8 @@ int test_slicing_int(void)
         }
     }
     c_value = 1337;
-    xview.nd_int[get_index(xview, 0, 1)] = c_value;
-    value = x.nd_int[get_index(x, 1, 2)];
+    xview.nd_int32[get_index(xview, 0, 1)] = c_value;
+    value = x.nd_int32[get_index(x, 1, 2)];
     my_assert(value , c_value, "testing xview assignment");
     free_array(x);
     free_array(xview);
@@ -300,7 +300,7 @@ int test_array_fill_int(void)
     int value;
     int c_value;
 
-    x = array_create(2, m_1_shape, nd_int);
+    x = array_create(2, m_1_shape, nd_int32);
     array_fill(32, x);
     // testing the index [3, 1]
     index = 3 * x.strides[0] + 1 * x.strides[1];
@@ -308,7 +308,7 @@ int test_array_fill_int(void)
     my_assert(index , c_index, "testing the strides");
     my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
     // testing the value with the index [3, 1]
-    value = x.nd_int[index];
+    value = x.nd_int32[index];
     c_value = 32;
     my_assert(value , c_value, "testing the value");
     free_array(x);
@@ -398,7 +398,7 @@ int test_array_zeros_int(void)
     int value;
     int c_value;
 
-    x = array_create(2, m_1_shape, nd_int);
+    x = array_create(2, m_1_shape, nd_int32);
     array_fill(0, x);
     // testing the index [3, 1]
     index = 3 * x.strides[0] + 1 * x.strides[1];
@@ -406,7 +406,7 @@ int test_array_zeros_int(void)
     my_assert(index , c_index, "testing the strides");
     my_assert(get_index(x, 3, 1) , c_index, "testing the indexing function");
     // testing the value with the index [3, 1]
-    value = x.nd_int[index];
+    value = x.nd_int32[index];
     c_value = 0;
     my_assert(value , c_value, "testing the value");
     free_array(x);
